@@ -11,8 +11,6 @@ on:
         required: true
       SSH_PORT:
         required: true
-      REPO:
-        required: true
       WORKSPACE:
         required: true
       DEPLOY_SCRIPT:
@@ -26,8 +24,6 @@ jobs:
     steps:
       - name: 배포 스크립트 실행
         uses: appleboy/ssh-action@master
-        env:
-          REPO: ${{ secrets.REPO }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
