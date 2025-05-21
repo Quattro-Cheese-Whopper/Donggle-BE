@@ -45,6 +45,17 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
     com.donggle: debug
+    root: ${LOGGING_LEVEL}  # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+
+  file:
+    name: ${LOGGING_DIR}/${LOGGING_FILE}
+
+  logback:
+    rollingpolicy:
+      max-history: 30       # default: 7
+      max-file-size: 10MB   # default: 10MB
+      total-size-cap: 5GB   # default: 제한 없음
+      file-name-pattern: ${LOGGING_DIR}/${LOGGING_FILE_NAME_PATTERN} # 압축해서 보관 -> 디스크 절약
 
 # Swagger UI settings
 springdoc:

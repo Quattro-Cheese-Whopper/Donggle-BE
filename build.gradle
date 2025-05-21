@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.5'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'com.diffplug.spotless' version '7.0.2'
+    id 'com.google.cloud.tools.jib' version '3.4.5'
 }
 
 group = 'com'
@@ -69,5 +70,28 @@ spotless {
         importOrder()               // import문 정렬
         trimTrailingWhitespace()    // 뒤에 공백 제거
         endWithNewline()            // 파일 끝에 개행 추가
+    }
+}
+
+jib {
+    def dockerUsername = System.getenv('DOCKER_USERNAME') ?: ''
+    def dockerPassword = System.getenv('DOCKER_PASSWORD') ?: ''
+    from {
+        image = 'amazoncorretto:21-alpine-jdk'
+    }
+    to {
+        image = 'audejr123/donggle:latest'
+        auth {
+            username = dockerUsername
+            password = dockerPassword
+        }
+    }
+    container {
+        jvmFlags = [
+                '-Dspring.profiles.active=' + System.getenv('PROFILE'),
+                '-Duser.timezone=Asia/Seoul',
+                '-Dfile.encoding=UTF-8',
+                '-XX:+UseContainerSupport'
+        ]
     }
 }
