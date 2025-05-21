@@ -50,7 +50,7 @@ public class NotificationService {
         User user = userService.findById(userId);
 
         // 본인의 알림인지 확인
-        if (!notification.getUser().getId().equals(userId)) {
+        if (!notification.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("해당 알림에 대한 권한이 없습니다.");
         }
 

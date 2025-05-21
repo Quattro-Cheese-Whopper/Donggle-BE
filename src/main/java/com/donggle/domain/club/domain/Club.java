@@ -49,7 +49,7 @@ public class Club {
             name = "club_managers",
             joinColumns = @JoinColumn(name = "club_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> managers = new ArrayList<>();
+    private final List<User> managers = new ArrayList<>();
 
     public enum ClubType {
         CENTRAL, // 중앙 동아리

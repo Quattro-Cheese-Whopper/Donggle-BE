@@ -19,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User signup(UserSignupRequest request) {
+    public void signup(UserSignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
@@ -37,7 +37,7 @@ public class UserService {
                         encodedPassword,
                         request.getStudentId(),
                         request.getName());
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)

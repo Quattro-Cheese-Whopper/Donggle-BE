@@ -30,12 +30,12 @@ public class FileService {
         // DB에 파일 정보 저장
         FileEntity fileEntity =
                 new FileEntity(
-                        fileInfo.getOriginalName(),
-                        fileInfo.getStoredName(),
-                        fileInfo.getExtension(),
-                        fileInfo.getContentType(),
-                        fileInfo.getSize(),
-                        fileInfo.getFilePath(),
+                        fileInfo.originalName(),
+                        fileInfo.storedName(),
+                        fileInfo.extension(),
+                        fileInfo.contentType(),
+                        fileInfo.size(),
+                        fileInfo.filePath(),
                         fileType,
                         relatedId);
 

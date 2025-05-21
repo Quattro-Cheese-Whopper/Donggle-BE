@@ -68,51 +68,11 @@ public class FileUtil {
     }
 
     /** 파일 정보를 저장하기 위한 내부 클래스 */
-    public static class FileInfo {
-        private final String originalName;
-        private final String storedName;
-        private final String extension;
-        private final String contentType;
-        private final long size;
-        private final String filePath;
-
-        public FileInfo(
-                String originalName,
-                String storedName,
-                String extension,
-                String contentType,
-                long size,
-                String filePath) {
-            this.originalName = originalName;
-            this.storedName = storedName;
-            this.extension = extension;
-            this.contentType = contentType;
-            this.size = size;
-            this.filePath = filePath;
-        }
-
-        public String getOriginalName() {
-            return originalName;
-        }
-
-        public String getStoredName() {
-            return storedName;
-        }
-
-        public String getExtension() {
-            return extension;
-        }
-
-        public String getContentType() {
-            return contentType;
-        }
-
-        public long getSize() {
-            return size;
-        }
-
-        public String getFilePath() {
-            return filePath;
-        }
-    }
+    public record FileInfo(
+            String originalName,
+            String storedName,
+            String extension,
+            String contentType,
+            long size,
+            String filePath) {}
 }

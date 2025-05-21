@@ -1,5 +1,6 @@
 package com.donggle.global.auth.jwt.interceptor;
 
+import com.donggle.global.auth.jwt.repository.TokenRepository;
 import com.donggle.global.auth.jwt.service.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private static final String REISSUE_URI = "/api/auth/refresh";
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenRepository tokenRepository;
 
     @Override
     public boolean preHandle(
@@ -45,11 +47,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         // Redis에 userId가 존재하는지 확인
-        if (!jwtTokenProvider.existsByMemberId(userId)) {
+        if (!tokenRepository.existsById(userId)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
 
-        return true;
+        return jwtTokenProvider.validateToken(token);
     }
 }

@@ -99,11 +99,6 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean existsByMemberId(Long memberId) {
-
-        return true;
-    }
-
     public boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
@@ -112,10 +107,6 @@ public class JwtTokenProvider {
             log.error("Invalid JWT token: {}", e.getMessage());
             return false;
         }
-    }
-
-    public long getAccessTokenExpirationMillis() {
-        return accessTokenExpireTime * 1000;
     }
 
     public long getRefreshTokenExpirationMillis() {
