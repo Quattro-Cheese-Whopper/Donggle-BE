@@ -9,5 +9,4 @@ public class DonggleApplication {
     public static void main(String[] args) {
         SpringApplication.run(DonggleApplication.class, args);
     }
-
 }
