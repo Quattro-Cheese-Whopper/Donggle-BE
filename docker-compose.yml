@@ -1,6 +1,6 @@
 services:
   mysql:
-    container_name: mysql-jnu-locker
+    container_name: mysql-donggle
     image: mysql:8.0
     ports:
       - "3306:3306"
@@ -24,7 +24,7 @@ services:
       - donggle-network
 
   redis:
-    container_name: redis-jnu-locker
+    container_name: redis-donggle
     image: redis:alpine
     ports:
       - "6379:6379"
@@ -41,7 +41,7 @@ services:
       - donggle-network
 
   was:
-    container_name: was-jnu-locker
+    container_name: was-donggle
     image: ${DOCKER_USERNAME}/${DOCKER_REPO}:${IMAGE_TAG}
     ports:
       - "8080:8080"
