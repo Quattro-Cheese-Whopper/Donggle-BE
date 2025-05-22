@@ -48,7 +48,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: [ "CMD-SHELL", "wget -q --spider http://localhost:8080$MANAGEMENT_BASE_PATH/health || exit 1" ]
+      test: [ "CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1" ]
       start_period: 36s
       start_interval: 5s
       interval: 10s
