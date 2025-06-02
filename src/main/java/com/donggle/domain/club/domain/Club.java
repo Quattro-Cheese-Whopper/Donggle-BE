@@ -70,7 +70,9 @@ public class Club {
         this.type = type;
         this.category = category;
         this.description = description;
-        this.createdAt = LocalDateTime.now();
+        this.memberCount = 0;
+        this.location = "";
+        this.contactInfo = "";
     }
 
     public void update(
