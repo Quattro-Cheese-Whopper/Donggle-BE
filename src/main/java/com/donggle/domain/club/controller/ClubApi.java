@@ -3,6 +3,7 @@ package com.donggle.domain.club.controller;
 import com.donggle.domain.club.domain.Club;
 import com.donggle.domain.club.dto.ClubRequest;
 import com.donggle.domain.club.dto.ClubResponse;
+import com.donggle.global.annotation.AllowAnonymous;
 import com.donggle.global.auth.resolver.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -68,6 +69,7 @@ public interface ClubApi {
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Parameter(hidden = true) @UserId Long userId);
 
+    @AllowAnonymous
     @Operation(summary = "동아리 조회", description = "동아리 ID로 동아리 정보를 조회합니다.")
     @ApiResponses(
             value = {
@@ -81,11 +83,13 @@ public interface ClubApi {
     ResponseEntity<ClubResponse> getClub(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId);
 
+    @AllowAnonymous
     @Operation(summary = "전체 동아리 목록 조회", description = "모든 동아리 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "동아리 목록 조회 성공")})
     @GetMapping
     ResponseEntity<List<ClubResponse>> getAllClubs();
 
+    @AllowAnonymous
     @Operation(summary = "동아리 타입별 조회", description = "동아리 타입(중앙동아리, 학과동아리)별로 동아리 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "동아리 목록 조회 성공")})
     @GetMapping("/type/{type}")
@@ -93,12 +97,14 @@ public interface ClubApi {
             @Parameter(description = "동아리 타입(CENTRAL, DEPARTMENT)") @PathVariable
                     Club.ClubType type);
 
+    @AllowAnonymous
     @Operation(summary = "동아리 카테고리별 조회", description = "동아리 카테고리(학술, 문화, 체육 등)별로 동아리 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "동아리 목록 조회 성공")})
     @GetMapping("/category/{category}")
     ResponseEntity<List<ClubResponse>> getClubsByCategory(
             @Parameter(description = "동아리 카테고리") @PathVariable Club.ClubCategory category);
 
+    @AllowAnonymous
     @Operation(summary = "동아리 필터링 조회", description = "동아리 타입과 카테고리로 필터링하여 동아리 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "동아리 목록 조회 성공")})
     @GetMapping("/filter")
@@ -108,6 +114,7 @@ public interface ClubApi {
             @Parameter(description = "동아리 카테고리") @RequestParam Club.ClubCategory category,
             @PageableDefault(size = 10, sort = "name") Pageable pageable);
 
+    @AllowAnonymous
     @Operation(summary = "동아리 검색", description = "키워드로 동아리를 검색합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "동아리 검색 성공")})
     @GetMapping("/search")

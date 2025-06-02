@@ -1,5 +1,6 @@
 package com.donggle.global.auth.jwt.interceptor;
 
+import com.donggle.global.annotation.AllowAnonymous;
 import com.donggle.global.auth.jwt.repository.TokenRepository;
 import com.donggle.global.auth.jwt.service.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
@@ -27,6 +29,12 @@ public class AuthInterceptor implements HandlerInterceptor {
             @NonNull Object handler) {
         // CORS preflight 요청은 토큰 검증 하지 않음
         if (CorsUtils.isPreFlightRequest(request)) {
+            return true;
+        }
+
+        // AllowAnonymous 어노테이션이 붙어있는 경우 토큰 검증을 하지 않음
+        if (handler instanceof HandlerMethod handlerMethod
+                && handlerMethod.getMethodAnnotation(AllowAnonymous.class) != null) {
             return true;
         }
 
