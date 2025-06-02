@@ -52,12 +52,14 @@ public class Club extends BaseEntity {
     }
 
     public enum ClubCategory {
-        ACADEMIC, // 학술
-        CULTURE, // 문화
-        SPORTS, // 체육
-        VOLUNTEER, // 봉사
-        RELIGION, // 종교
-        OTHER // 기타
+        // 중앙동아리 분과
+        학술분과, 문예분과, 체육분과, 봉사분과, 종교분과, 기타,
+        
+        // 단과대학
+        농업생명과학대학, 사회과학대학, 수의과대학, 치의학전문대학원,
+        경영대학, 인문대학, AI융합대학, 본부직할,
+        사범대학, 예술대학, 공과대학, 간호대학,
+        의과대학, 생활과학대학, 약학대학, 자연과학대학
     }
 
     public Club(
