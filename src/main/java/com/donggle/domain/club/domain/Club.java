@@ -1,8 +1,8 @@
 package com.donggle.domain.club.domain;
 
 import com.donggle.domain.user.domain.User;
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "clubs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Club {
+public class Club extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +38,6 @@ public class Club {
     private String location;
 
     private String contactInfo;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @ManyToMany
     @JoinTable(
@@ -97,7 +92,6 @@ public class Club {
         this.memberCount = memberCount;
         this.location = location;
         this.contactInfo = contactInfo;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void addManager(User user) {

@@ -1,7 +1,7 @@
 package com.donggle.domain.file.domain;
 
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "files")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class FileEntity {
+public class FileEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +41,6 @@ public class FileEntity {
     @Column(nullable = false)
     private Long relatedId;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     public enum FileType {
         CLUB_IMAGE, // 동아리 이미지
         RECRUITMENT_IMAGE, // 모집 공고 이미지
@@ -67,6 +64,5 @@ public class FileEntity {
         this.filePath = filePath;
         this.fileType = fileType;
         this.relatedId = relatedId;
-        this.createdAt = LocalDateTime.now();
     }
 }

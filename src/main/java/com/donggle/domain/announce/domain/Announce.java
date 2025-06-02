@@ -2,8 +2,8 @@ package com.donggle.domain.announce.domain;
 
 import com.donggle.domain.club.domain.Club;
 import com.donggle.domain.user.domain.User;
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "announces")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Announce {
+public class Announce extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +40,6 @@ public class Announce {
     @Column(nullable = false)
     private boolean pinned;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     public enum AnnounceType {
         GENERAL, // 일반 공지사항
         CLUB // 동아리 공지사항
@@ -58,15 +52,12 @@ public class Announce {
         this.content = content;
         this.type = club == null ? AnnounceType.GENERAL : AnnounceType.CLUB;
         this.pinned = pinned;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
     }
 
     public void update(String title, String content, boolean pinned) {
         this.title = title;
         this.content = content;
         this.pinned = pinned;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public boolean isAuthor(User user) {

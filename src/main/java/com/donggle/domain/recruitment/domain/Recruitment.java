@@ -1,6 +1,7 @@
 package com.donggle.domain.recruitment.domain;
 
 import com.donggle.domain.club.domain.Club;
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "recruitments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Recruitment {
+public class Recruitment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +43,6 @@ public class Recruitment {
 
     private String applicationLink;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public enum RecruitmentStatus {
         RECRUITING, // 모집중
         COMPLETED, // 모집완료
@@ -72,7 +68,6 @@ public class Recruitment {
         this.status = status;
         this.contactInfo = contactInfo;
         this.applicationLink = applicationLink;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void update(
@@ -92,11 +87,9 @@ public class Recruitment {
         this.status = status;
         this.contactInfo = contactInfo;
         this.applicationLink = applicationLink;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateStatus(RecruitmentStatus status) {
         this.status = status;
-        this.updatedAt = LocalDateTime.now();
     }
 }

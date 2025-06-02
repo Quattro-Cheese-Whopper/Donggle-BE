@@ -1,7 +1,7 @@
 package com.donggle.domain.user.domain;
 
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +32,6 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public enum UserRole {
         GUEST,
         MANAGER,
@@ -49,27 +44,22 @@ public class User {
         this.studentId = studentId;
         this.name = name;
         this.role = UserRole.GUEST;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void updateRole(UserRole role) {
         this.role = role;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateEmail(String email) {
         this.email = email;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void updatePassword(String password) {
         this.password = password;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateName(String name) {
         this.name = name;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public boolean isAdmin() {

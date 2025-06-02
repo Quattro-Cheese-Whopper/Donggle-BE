@@ -1,8 +1,8 @@
 package com.donggle.domain.notification.domain;
 
 import com.donggle.domain.user.domain.User;
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "notifications")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Notification {
+public class Notification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +37,6 @@ public class Notification {
     @Column(name = "is_read", nullable = false)
     private boolean isRead;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     public enum NotificationType {
         NEW_ANNOUNCE, // 새로운 공지사항
         APPLICATION_STATUS_CHANGE, // 지원 상태 변경
@@ -55,7 +52,6 @@ public class Notification {
         this.type = type;
         this.relatedId = relatedId;
         this.isRead = false;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void markAsRead() {

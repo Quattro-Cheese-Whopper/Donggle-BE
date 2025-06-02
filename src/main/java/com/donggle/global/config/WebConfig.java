@@ -25,8 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:5173",
                         "http://localhost:8080",
                         "http://quattro-cheese.duckdns.org:8080",
-                        "http://quattro-cheese.duckdns.org"
-                        ) // 프론트엔드 서버 주소
+                        "http://quattro-cheese.duckdns.org") // 프론트엔드 서버 주소
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

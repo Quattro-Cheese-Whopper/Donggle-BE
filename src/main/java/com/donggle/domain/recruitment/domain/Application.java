@@ -1,8 +1,8 @@
 package com.donggle.domain.recruitment.domain;
 
 import com.donggle.domain.user.domain.User;
+import com.donggle.global.persistence.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "applications")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Application {
+public class Application extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +32,6 @@ public class Application {
     @Column(nullable = false)
     private ApplicationStatus status;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public enum ApplicationStatus {
         PENDING, // 대기중
         APPROVED, // 승인됨
@@ -49,16 +44,13 @@ public class Application {
         this.user = user;
         this.content = content;
         this.status = ApplicationStatus.PENDING;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void updateStatus(ApplicationStatus status) {
         this.status = status;
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateContent(String content) {
         this.content = content;
-        this.updatedAt = LocalDateTime.now();
     }
 }
