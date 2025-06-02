@@ -65,14 +65,21 @@ public class Club {
         OTHER // 기타
     }
 
-    public Club(String name, ClubType type, ClubCategory category, String description) {
+    public Club(
+            String name,
+            ClubType type,
+            ClubCategory category,
+            String description,
+            Integer memberCount,
+            String location,
+            String contactInfo) {
         this.name = name;
         this.type = type;
         this.category = category;
         this.description = description;
-        this.memberCount = 0;
-        this.location = "";
-        this.contactInfo = "";
+        this.memberCount = memberCount;
+        this.location = location;
+        this.contactInfo = contactInfo;
     }
 
     public void update(

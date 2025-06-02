@@ -21,11 +21,15 @@ public class ClubRequest {
     @NotNull(message = "동아리 카테고리는 필수 입력값입니다.")
     private Club.ClubCategory category;
 
+    @NotBlank(message = "동아리 설명은 필수 입력값입니다.")
     private String description;
 
+    @NotNull(message = "동아리 인원 수는 필수 입력값입니다.")
     private Integer memberCount;
 
+    @NotBlank(message = "동아리 위치는 필수 입력값입니다.")
     private String location;
 
+    @NotBlank(message = "동아리 연락처는 필수 입력값입니다.")
     private String contactInfo;
 }

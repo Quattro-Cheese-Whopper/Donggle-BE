@@ -34,7 +34,10 @@ public class ClubService {
                         request.getName(),
                         request.getType(),
                         request.getCategory(),
-                        request.getDescription());
+                        request.getDescription(),
+                        request.getMemberCount(),
+                        request.getLocation(),
+                        request.getContactInfo());
 
         club.addManager(user);
 
