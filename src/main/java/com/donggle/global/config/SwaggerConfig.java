@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
+import jakarta.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI openAPI(ServletContext servletContext) {
         Info info =
                 new Info()
                         .title("전남대학교 동아리 통합 모집 플랫폼 API")
@@ -53,17 +54,14 @@ public class SwaggerConfig {
                         new Tag().name("파일").description("파일 관련 API"),
                         new Tag().name("알림").description("알림 관련 API"));
 
-        // 개발/운영 서버 설정
-        List<Server> servers =
-                Arrays.asList(
-                        new Server().url("http://localhost:8080").description("개발 서버"),
-                        new Server().url("https://api.donggle.example.com").description("운영 서버"));
+        String contextPath = servletContext.getContextPath();
+        Server server = new Server().url(contextPath);
 
         return new OpenAPI()
                 .info(info)
                 .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                 .addSecurityItem(securityRequirement)
                 .tags(tags)
-                .servers(servers);
+                .servers(List.of(server));
     }
 }
