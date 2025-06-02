@@ -35,7 +35,7 @@ public interface ClubApi {
             })
     @PostMapping
     ResponseEntity<ClubResponse> createClub(
-            @Valid @RequestBody ClubRequest request, @UserId Long userId);
+            @Valid @RequestBody ClubRequest request, @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 수정", description = "동아리 정보를 수정합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -53,7 +53,7 @@ public interface ClubApi {
     ResponseEntity<ClubResponse> updateClub(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Valid @RequestBody ClubRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 삭제", description = "동아리를 삭제합니다. 해당 동아리의 관리자 권한 또는 어드민 권한이 필요합니다.")
     @ApiResponses(
@@ -65,7 +65,8 @@ public interface ClubApi {
             })
     @DeleteMapping("/{clubId}")
     ResponseEntity<Void> deleteClub(
-            @Parameter(description = "동아리 ID") @PathVariable Long clubId, @UserId Long userId);
+            @Parameter(description = "동아리 ID") @PathVariable Long clubId,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 조회", description = "동아리 ID로 동아리 정보를 조회합니다.")
     @ApiResponses(
@@ -121,7 +122,7 @@ public interface ClubApi {
                 @ApiResponse(responseCode = "401", description = "인증 실패")
             })
     @GetMapping("/my-clubs")
-    ResponseEntity<List<ClubResponse>> getMyClubs(@UserId Long userId);
+    ResponseEntity<List<ClubResponse>> getMyClubs(@Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 관리자 추가", description = "동아리에 관리자를 추가합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -135,7 +136,7 @@ public interface ClubApi {
     ResponseEntity<Void> addManager(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Parameter(description = "추가할 관리자 ID") @PathVariable Long managerId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 관리자 제거", description = "동아리에서 관리자를 제거합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -149,5 +150,5 @@ public interface ClubApi {
     ResponseEntity<Void> removeManager(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Parameter(description = "제거할 관리자 ID") @PathVariable Long managerId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 }

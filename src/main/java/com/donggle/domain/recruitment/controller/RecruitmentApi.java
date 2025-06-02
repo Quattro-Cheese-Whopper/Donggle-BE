@@ -41,7 +41,7 @@ public interface RecruitmentApi {
     ResponseEntity<RecruitmentResponse> createRecruitment(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Valid @RequestBody RecruitmentRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "모집 공고 수정", description = "모집 공고를 수정합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -64,7 +64,7 @@ public interface RecruitmentApi {
     ResponseEntity<RecruitmentResponse> updateRecruitment(
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
             @Valid @RequestBody RecruitmentRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "모집 공고 삭제", description = "모집 공고를 삭제합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -77,7 +77,7 @@ public interface RecruitmentApi {
     @DeleteMapping("/{recruitmentId}")
     ResponseEntity<Void> deleteRecruitment(
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "모집 공고 조회", description = "모집 공고 ID로 모집 공고 정보를 조회합니다.")
     @ApiResponses(
@@ -158,5 +158,5 @@ public interface RecruitmentApi {
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
             @Parameter(description = "변경할 상태(PREPARING, RECRUITING, CLOSED)") @PathVariable
                     Recruitment.RecruitmentStatus status,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 }

@@ -37,7 +37,8 @@ public interface AnnounceApi {
             })
     @PostMapping
     ResponseEntity<AnnounceResponse> createGeneralAnnounce(
-            @Valid @RequestBody AnnounceRequest request, @UserId Long userId);
+            @Valid @RequestBody AnnounceRequest request,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "동아리 공지사항 생성", description = "새로운 동아리 공지사항을 생성합니다. 해당 동아리의 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -57,7 +58,7 @@ public interface AnnounceApi {
     ResponseEntity<AnnounceResponse> createClubAnnounce(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @Valid @RequestBody AnnounceRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다. 작성자 또는 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -77,7 +78,7 @@ public interface AnnounceApi {
     ResponseEntity<AnnounceResponse> updateAnnounce(
             @Parameter(description = "공지사항 ID") @PathVariable Long announceId,
             @Valid @RequestBody AnnounceRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제합니다. 작성자 또는 관리자 권한이 필요합니다.")
     @ApiResponses(
@@ -89,7 +90,8 @@ public interface AnnounceApi {
             })
     @DeleteMapping("/{announceId}")
     ResponseEntity<Void> deleteAnnounce(
-            @Parameter(description = "공지사항 ID") @PathVariable Long announceId, @UserId Long userId);
+            @Parameter(description = "공지사항 ID") @PathVariable Long announceId,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "공지사항 조회", description = "공지사항 ID로 공지사항 정보를 조회합니다.")
     @ApiResponses(

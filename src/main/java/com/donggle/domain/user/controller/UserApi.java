@@ -34,7 +34,8 @@ public interface UserApi {
                 @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
             })
     @GetMapping("/me")
-    ResponseEntity<UserProfileResponse> getCurrentUser(@UserId Long userId);
+    ResponseEntity<UserProfileResponse> getCurrentUser(
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "회원 정보 조회", description = "특정 회원의 프로필 정보를 조회합니다.")
     @ApiResponses(
@@ -72,7 +73,8 @@ public interface UserApi {
             })
     @PutMapping("/me")
     ResponseEntity<UserProfileResponse> updateUserProfile(
-            @Valid @RequestBody UserUpdateRequest request, @UserId Long userId);
+            @Valid @RequestBody UserUpdateRequest request,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "회원 권한 변경", description = "특정 회원의 권한을 변경합니다. 관리자 권한이 필요합니다.")
     @ApiResponses(

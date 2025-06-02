@@ -43,7 +43,7 @@ public interface ApplicationApi {
     ResponseEntity<ApplicationResponse> createApplication(
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
             @Valid @RequestBody ApplicationRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "지원서 수정", description = "제출한 지원서를 수정합니다. 지원 상태가 대기 중인 경우에만 가능합니다.")
     @ApiResponses(
@@ -67,7 +67,7 @@ public interface ApplicationApi {
     ResponseEntity<ApplicationResponse> updateApplication(
             @Parameter(description = "지원서 ID") @PathVariable Long applicationId,
             @Valid @RequestBody ApplicationRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "지원 취소", description = "제출한 지원을 취소합니다. 지원 상태가 대기 중인 경우에만 가능합니다.")
     @ApiResponses(
@@ -81,7 +81,7 @@ public interface ApplicationApi {
     @DeleteMapping("/{applicationId}")
     ResponseEntity<Void> cancelApplication(
             @Parameter(description = "지원서 ID") @PathVariable Long applicationId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(
             summary = "지원 상태 변경",
@@ -106,7 +106,7 @@ public interface ApplicationApi {
     ResponseEntity<ApplicationResponse> updateApplicationStatus(
             @Parameter(description = "지원서 ID") @PathVariable Long applicationId,
             @Valid @RequestBody ApplicationStatusRequest request,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(
             summary = "지원서 조회",
@@ -129,7 +129,7 @@ public interface ApplicationApi {
     @GetMapping("/{applicationId}")
     ResponseEntity<ApplicationResponse> getApplication(
             @Parameter(description = "지원서 ID") @PathVariable Long applicationId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(
             summary = "모집별 지원서 목록 조회",
@@ -145,7 +145,7 @@ public interface ApplicationApi {
     ResponseEntity<Page<ApplicationResponse>> getApplicationsByRecruitment(
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
             @PageableDefault(size = 10) Pageable pageable,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(
             summary = "동아리별 지원서 목록 조회",
@@ -161,7 +161,7 @@ public interface ApplicationApi {
     ResponseEntity<Page<ApplicationResponse>> getApplicationsByClub(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @PageableDefault(size = 10) Pageable pageable,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "내 지원서 목록 조회", description = "로그인한 사용자가 제출한 지원서 목록을 조회합니다.")
     @ApiResponses(
@@ -171,7 +171,8 @@ public interface ApplicationApi {
             })
     @GetMapping("/me")
     ResponseEntity<Page<ApplicationResponse>> getMyApplications(
-            @PageableDefault(size = 10) Pageable pageable, @UserId Long userId);
+            @PageableDefault(size = 10) Pageable pageable,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "상태별 내 지원서 목록 조회", description = "상태(대기, 합격, 불합격 등)별로 내 지원서 목록을 조회합니다.")
     @ApiResponses(
@@ -184,7 +185,7 @@ public interface ApplicationApi {
             @Parameter(description = "지원 상태(PENDING, ACCEPTED, REJECTED, CANCELED)") @PathVariable
                     Application.ApplicationStatus status,
             @PageableDefault(size = 10) Pageable pageable,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "모집별 상태별 지원 수 집계", description = "특정 모집 공고에 대한 상태별 지원 수를 조회합니다.")
     @ApiResponses(

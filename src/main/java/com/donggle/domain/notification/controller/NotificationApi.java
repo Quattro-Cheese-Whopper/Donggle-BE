@@ -27,7 +27,8 @@ public interface NotificationApi {
             })
     @GetMapping
     ResponseEntity<Page<NotificationResponse>> getNotifications(
-            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable, @UserId Long userId);
+            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "미읽은 알림 목록 조회", description = "사용자의 미읽은 알림 목록을 조회합니다.")
     @ApiResponses(
@@ -37,7 +38,8 @@ public interface NotificationApi {
             })
     @GetMapping("/unread")
     ResponseEntity<Page<NotificationResponse>> getUnreadNotifications(
-            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable, @UserId Long userId);
+            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable,
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "알림 상세 조회", description = "특정 알림의 상세 정보를 조회합니다.")
     @ApiResponses(
@@ -58,7 +60,7 @@ public interface NotificationApi {
     @GetMapping("/{notificationId}")
     ResponseEntity<NotificationResponse> getNotification(
             @Parameter(description = "알림 ID") @PathVariable Long notificationId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "알림 읽음 표시", description = "특정 알림을 읽음 표시합니다.")
     @ApiResponses(
@@ -79,7 +81,7 @@ public interface NotificationApi {
     @PatchMapping("/{notificationId}/read")
     ResponseEntity<NotificationResponse> markAsRead(
             @Parameter(description = "알림 ID") @PathVariable Long notificationId,
-            @UserId Long userId);
+            @Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "모든 알림 읽음 표시", description = "사용자의 모든 알림을 읽음 표시합니다.")
     @ApiResponses(
@@ -88,7 +90,7 @@ public interface NotificationApi {
                 @ApiResponse(responseCode = "401", description = "인증 실패")
             })
     @PatchMapping("/read-all")
-    ResponseEntity<Void> markAllAsRead(@UserId Long userId);
+    ResponseEntity<Void> markAllAsRead(@Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "미읽은 알림 수 조회", description = "사용자의 미읽은 알림 수를 조회합니다.")
     @ApiResponses(
@@ -97,7 +99,7 @@ public interface NotificationApi {
                 @ApiResponse(responseCode = "401", description = "인증 실패")
             })
     @GetMapping("/unread/count")
-    ResponseEntity<Long> countUnreadNotifications(@UserId Long userId);
+    ResponseEntity<Long> countUnreadNotifications(@Parameter(hidden = true) @UserId Long userId);
 
     @Operation(summary = "최근 미읽은 알림 조회", description = "사용자의 최근 미읽은 알림 목록을 조회합니다.")
     @ApiResponses(
@@ -106,5 +108,6 @@ public interface NotificationApi {
                 @ApiResponse(responseCode = "401", description = "인증 실패")
             })
     @GetMapping("/recent")
-    ResponseEntity<List<NotificationResponse>> getRecentUnreadNotifications(@UserId Long userId);
+    ResponseEntity<List<NotificationResponse>> getRecentUnreadNotifications(
+            @Parameter(hidden = true) @UserId Long userId);
 }

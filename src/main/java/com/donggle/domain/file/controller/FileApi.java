@@ -95,7 +95,8 @@ public interface FileApi {
             })
     @DeleteMapping("/{fileId}")
     ResponseEntity<Void> deleteFile(
-            @Parameter(description = "파일 ID") @PathVariable Long fileId, @UserId Long userId)
+            @Parameter(description = "파일 ID") @PathVariable Long fileId,
+            @Parameter(hidden = true) @UserId Long userId)
             throws IOException;
 
     @Operation(summary = "타입 및 관련 ID별 파일 일괄 삭제", description = "특정 타입과 관련 ID에 속하는 모든 파일을 삭제합니다.")
@@ -114,6 +115,6 @@ public interface FileApi {
                     FileEntity.FileType fileType,
             @Parameter(description = "관련 엔티티 ID(동아리 ID, 모집 공고 ID, 공지사항 ID 등)") @PathVariable
                     Long relatedId,
-            @UserId Long userId)
+            @Parameter(hidden = true) @UserId Long userId)
             throws IOException;
 }
