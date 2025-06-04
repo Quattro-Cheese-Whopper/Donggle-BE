@@ -34,10 +34,10 @@ public class ClubService {
                         request.getName(),
                         request.getType(),
                         request.getCategory(),
-                        request.getDescription(),
-                        request.getMemberCount(),
-                        request.getLocation(),
-                        request.getContactInfo(),
+                        request.getDescriptionWithDefault(),
+                        request.getMemberCountWithDefault(),
+                        request.getLocationWithDefault(),
+                        request.getContactInfoWithDefault(),
                         request.getProfileImageName());
 
         club.addManager(user);
@@ -60,10 +60,10 @@ public class ClubService {
                 request.getName(),
                 request.getType(),
                 request.getCategory(),
-                request.getDescription(),
-                request.getMemberCount(),
-                request.getLocation(),
-                request.getContactInfo(),
+                request.getDescriptionWithDefault(),
+                request.getMemberCountWithDefault(),
+                request.getLocationWithDefault(),
+                request.getContactInfoWithDefault(),
                 request.getProfileImageName());
 
         Club updatedClub = clubRepository.save(club);
