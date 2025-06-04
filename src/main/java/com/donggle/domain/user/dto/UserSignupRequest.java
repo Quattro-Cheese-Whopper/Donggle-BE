@@ -25,7 +25,7 @@ public class UserSignupRequest {
     private String password;
 
     @NotBlank(message = "학번은 필수 입력값입니다.")
-    @Pattern(regexp = "^\\d{9}$", message = "학번은 9자리 숫자여야 합니다.")
+    @Pattern(regexp = "^\\d{6}$", message = "학번은 6자리 숫자여야 합니다.")
     private String studentId;
 
     @NotBlank(message = "이름은 필수 입력값입니다.")
