@@ -3,13 +3,13 @@ package com.donggle.domain.file.controller;
 import com.donggle.domain.file.domain.FileEntity;
 import com.donggle.domain.file.dto.FileResponse;
 import com.donggle.domain.file.service.FileService;
-import com.donggle.global.annotation.AllowAnonymous;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/files")
 @RequiredArgsConstructor
@@ -55,6 +56,8 @@ public class FileController implements FileApi {
 
         Path path = Paths.get(file.getFilePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        log.info("Downloading file: {}", file.getOriginalName());
 
         return ResponseEntity.ok()
                 .header(

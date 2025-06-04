@@ -41,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/auth/**",
                         "/api/clubs",
                         "/api/recruitments",
-                        "/api/files/download/**", // 파일 다운로드는 익명 접근 허용
+                        "/api/files/download/**",
                         // Swagger UI 관련 경로
                         "/swagger-ui.html",
                         "/swagger-ui/**",

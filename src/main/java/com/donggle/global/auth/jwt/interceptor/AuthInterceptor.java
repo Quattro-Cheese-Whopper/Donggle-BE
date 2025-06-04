@@ -7,12 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
@@ -31,6 +33,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (CorsUtils.isPreFlightRequest(request)) {
             return true;
         }
+
+        // 요청이 온 경로 확인
+        log.info("Request URI: {}", request.getRequestURI());
 
         // AllowAnonymous 어노테이션이 붙어있는 경우 토큰 검증을 하지 않음
         if (handler instanceof HandlerMethod handlerMethod

@@ -2,6 +2,7 @@ package com.donggle.global.error;
 
 import com.donggle.global.error.exception.EntityNotFoundException;
 import com.donggle.global.error.exception.ForbiddenException;
+import com.donggle.global.error.exception.MissingTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +42,20 @@ public class GlobalExceptionHandler {
                         request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(MissingTokenException.class)
+    public ResponseEntity<ErrorResponse> handleMissingTokenException(
+            MissingTokenException e, HttpServletRequest request) {
+
+        ErrorResponse response =
+                ErrorResponse.of(
+                        HttpStatus.UNAUTHORIZED.value(),
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        e.getMessage(),
+                        request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
