@@ -39,6 +39,8 @@ public class Club extends BaseEntity {
 
     private String contactInfo;
 
+    private String profileImageName;
+
     @ManyToMany
     @JoinTable(
             name = "club_managers",
@@ -86,7 +88,8 @@ public class Club extends BaseEntity {
             String description,
             Integer memberCount,
             String location,
-            String contactInfo) {
+            String contactInfo,
+            String profileImageName) {
         this.name = name;
         this.type = type;
         this.category = category;
@@ -94,6 +97,7 @@ public class Club extends BaseEntity {
         this.memberCount = memberCount;
         this.location = location;
         this.contactInfo = contactInfo;
+        this.profileImageName = profileImageName;
     }
 
     public void update(
@@ -103,7 +107,8 @@ public class Club extends BaseEntity {
             String description,
             Integer memberCount,
             String location,
-            String contactInfo) {
+            String contactInfo,
+            String profileImageName) {
         this.name = name;
         this.type = type;
         this.category = category;
@@ -111,6 +116,7 @@ public class Club extends BaseEntity {
         this.memberCount = memberCount;
         this.location = location;
         this.contactInfo = contactInfo;
+        this.profileImageName = profileImageName;
     }
 
     public void addManager(User user) {

@@ -37,7 +37,8 @@ public class ClubService {
                         request.getDescription(),
                         request.getMemberCount(),
                         request.getLocation(),
-                        request.getContactInfo());
+                        request.getContactInfo(),
+                        request.getProfileImageName());
 
         club.addManager(user);
 
@@ -62,7 +63,8 @@ public class ClubService {
                 request.getDescription(),
                 request.getMemberCount(),
                 request.getLocation(),
-                request.getContactInfo());
+                request.getContactInfo(),
+                request.getProfileImageName());
 
         Club updatedClub = clubRepository.save(club);
         return ClubResponse.from(updatedClub);

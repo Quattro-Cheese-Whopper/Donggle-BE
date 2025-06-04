@@ -19,6 +19,7 @@ public class ClubResponse {
     private Integer memberCount;
     private String location;
     private String contactInfo;
+    private String profileImageName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -32,6 +33,7 @@ public class ClubResponse {
                 club.getMemberCount(),
                 club.getLocation(),
                 club.getContactInfo(),
+                club.getProfileImageName(),
                 club.getCreatedAt(),
                 club.getUpdatedAt());
     }

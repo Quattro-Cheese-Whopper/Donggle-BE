@@ -3,6 +3,7 @@ package com.donggle.domain.club.dto;
 import com.donggle.domain.club.domain.Club;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,10 @@ public class ClubRequest {
 
     @NotBlank(message = "동아리 연락처는 필수 입력값입니다.")
     private String contactInfo;
+
+    @Pattern(
+        regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\..+$",
+        message = "프로필 이미지 파일명은 UUID 형식이어야 합니다. (예: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.jpg)"
+    )
+    private String profileImageName;
 }
