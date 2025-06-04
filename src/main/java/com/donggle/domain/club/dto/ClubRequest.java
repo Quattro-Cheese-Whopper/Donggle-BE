@@ -1,6 +1,7 @@
 package com.donggle.domain.club.dto;
 
 import com.donggle.domain.club.domain.Club;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,20 +32,28 @@ public class ClubRequest {
 
     private String profileImageName;
 
-    // 기본값이 적용된 값을 반환하는 메서드들
+    // 기본값이 적용된 값을 반환하는 메서드들 (Swagger에서 숨김)
+    @Schema(hidden = true)
     public String getDescriptionWithDefault() {
-        return description != null && !description.trim().isEmpty() ? description : "동아리 소개가 준비중입니다.";
+        return description != null && !description.trim().isEmpty()
+                ? description
+                : "동아리 소개가 준비중입니다.";
     }
 
+    @Schema(hidden = true)
     public Integer getMemberCountWithDefault() {
         return memberCount != null ? memberCount : 1;
     }
 
+    @Schema(hidden = true)
     public String getLocationWithDefault() {
         return location != null && !location.trim().isEmpty() ? location : "위치 정보가 준비중입니다.";
     }
 
+    @Schema(hidden = true)
     public String getContactInfoWithDefault() {
-        return contactInfo != null && !contactInfo.trim().isEmpty() ? contactInfo : "연락처 정보가 준비중입니다.";
+        return contactInfo != null && !contactInfo.trim().isEmpty()
+                ? contactInfo
+                : "연락처 정보가 준비중입니다.";
     }
 }
