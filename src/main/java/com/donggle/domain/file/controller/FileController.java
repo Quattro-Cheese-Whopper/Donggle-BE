@@ -36,14 +36,12 @@ public class FileController implements FileApi {
     }
 
     @Override
-    @AllowAnonymous
     public ResponseEntity<FileResponse> getFileInfo(Long fileId) {
         FileResponse response = fileService.getFile(fileId);
         return ResponseEntity.ok(response);
     }
 
     @Override
-    @AllowAnonymous
     public ResponseEntity<List<FileResponse>> getFilesByTypeAndRelatedId(
             FileEntity.FileType fileType, Long relatedId) {
 
@@ -52,7 +50,6 @@ public class FileController implements FileApi {
     }
 
     @Override
-    @AllowAnonymous
     public ResponseEntity<Resource> downloadFile(String storedName) throws IOException {
         FileEntity file = fileService.findByStoredName(storedName);
 

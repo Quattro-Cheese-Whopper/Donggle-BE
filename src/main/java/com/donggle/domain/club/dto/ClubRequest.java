@@ -35,8 +35,8 @@ public class ClubRequest {
     private String contactInfo;
 
     @Pattern(
-        regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\..+$",
-        message = "프로필 이미지 파일명은 UUID 형식이어야 합니다. (예: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.jpg)"
-    )
+            regexp =
+                    "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\..+$",
+            message = "프로필 이미지 파일명은 UUID 형식이어야 합니다. (예: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.jpg)")
     private String profileImageName;
 }

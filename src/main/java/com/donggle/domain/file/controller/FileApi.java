@@ -2,6 +2,7 @@ package com.donggle.domain.file.controller;
 
 import com.donggle.domain.file.domain.FileEntity;
 import com.donggle.domain.file.dto.FileResponse;
+import com.donggle.global.annotation.AllowAnonymous;
 import com.donggle.global.auth.resolver.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,6 +46,7 @@ public interface FileApi {
             @Parameter(description = "업로드할 파일") @RequestParam("file") MultipartFile file)
             throws IOException;
 
+    @AllowAnonymous
     @Operation(summary = "파일 정보 조회", description = "파일 ID로 파일 정보를 조회합니다.")
     @ApiResponses(
             value = {
@@ -58,6 +60,7 @@ public interface FileApi {
     ResponseEntity<FileResponse> getFileInfo(
             @Parameter(description = "파일 ID") @PathVariable Long fileId);
 
+    @AllowAnonymous
     @Operation(summary = "타입 및 관련 ID별 파일 목록 조회", description = "특정 타입과 관련 ID에 속하는 파일 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "파일 목록 조회 성공")})
     @GetMapping("/{fileType}/{relatedId}")
@@ -70,6 +73,7 @@ public interface FileApi {
             @Parameter(description = "관련 엔티티 ID(동아리 ID, 모집 공고 ID, 공지사항 ID 등)") @PathVariable
                     Long relatedId);
 
+    @AllowAnonymous
     @Operation(summary = "파일 다운로드", description = "저장된 파일명으로 파일을 다운로드합니다.")
     @ApiResponses(
             value = {
