@@ -3,6 +3,7 @@ package com.donggle.domain.file.controller;
 import com.donggle.domain.file.domain.FileEntity;
 import com.donggle.domain.file.dto.FileResponse;
 import com.donggle.domain.file.service.FileService;
+import com.donggle.global.annotation.AllowAnonymous;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,12 +36,14 @@ public class FileController implements FileApi {
     }
 
     @Override
+    @AllowAnonymous
     public ResponseEntity<FileResponse> getFileInfo(Long fileId) {
         FileResponse response = fileService.getFile(fileId);
         return ResponseEntity.ok(response);
     }
 
     @Override
+    @AllowAnonymous
     public ResponseEntity<List<FileResponse>> getFilesByTypeAndRelatedId(
             FileEntity.FileType fileType, Long relatedId) {
 
@@ -49,6 +52,7 @@ public class FileController implements FileApi {
     }
 
     @Override
+    @AllowAnonymous
     public ResponseEntity<Resource> downloadFile(String storedName) throws IOException {
         FileEntity file = fileService.findByStoredName(storedName);
 
