@@ -6,13 +6,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileUtil {
 
-    private static final String UPLOAD_DIR = "uploads";
+    private final String uploadDir;
+
+    public FileUtil(@Value("${file.upload.path}") String uploadDir) {
+        this.uploadDir = uploadDir;
+    }
 
     /**
      * 파일을 업로드 디렉토리에 저장합니다.
@@ -23,7 +28,7 @@ public class FileUtil {
      */
     public FileInfo saveFile(MultipartFile file) throws IOException {
         // 디렉토리 생성
-        Path uploadPath = Paths.get(UPLOAD_DIR);
+        Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }

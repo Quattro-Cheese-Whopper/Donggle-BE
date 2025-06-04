@@ -61,6 +61,7 @@ services:
         condition: service_healthy
     volumes:
       - ${WAS_LOG_PATH}:${LOGGING_DIR}
+      - file-storage:/app/uploads  # 파일 업로드 볼륨 매핑
     networks:
       - donggle-network
 
@@ -70,4 +71,6 @@ networks:
 
 volumes:
   mysql-data:
+     external: true
+  file-storage:
      external: true
