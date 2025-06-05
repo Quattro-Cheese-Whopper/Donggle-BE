@@ -4,6 +4,8 @@ import com.donggle.domain.club.domain.Club;
 import com.donggle.domain.club.dto.ClubRequest;
 import com.donggle.domain.club.dto.ClubResponse;
 import com.donggle.domain.club.repository.ClubRepository;
+import com.donggle.domain.recruitment.domain.Recruitment;
+import com.donggle.domain.recruitment.repository.RecruitmentRepository;
 import com.donggle.domain.user.domain.User;
 import com.donggle.domain.user.service.UserService;
 import com.donggle.global.error.exception.EntityNotFoundException;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClubService {
 
     private final ClubRepository clubRepository;
+    private final RecruitmentRepository recruitmentRepository;
     private final UserService userService;
 
     @Transactional
@@ -46,7 +49,8 @@ public class ClubService {
         userService.updateUserRole(userId, User.UserRole.MANAGER);
 
         Club savedClub = clubRepository.save(club);
-        return ClubResponse.from(savedClub);
+        // 새로 생성된 동아리는 모집공고가 없으므로 null
+        return ClubResponse.from(savedClub, null);
     }
 
     @Transactional
@@ -67,7 +71,8 @@ public class ClubService {
                 request.getProfileImageName());
 
         Club updatedClub = clubRepository.save(club);
-        return ClubResponse.from(updatedClub);
+        Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(updatedClub);
+        return ClubResponse.from(updatedClub, latestStatus);
     }
 
     @Transactional
@@ -93,22 +98,44 @@ public class ClubService {
     @Transactional(readOnly = true)
     public ClubResponse getClub(Long clubId) {
         Club club = findById(clubId);
-        return ClubResponse.from(club);
+        Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(club);
+        return ClubResponse.from(club, latestStatus);
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getAllClubs() {
-        return clubRepository.findAll().stream().map(ClubResponse::from).toList();
+        return clubRepository.findAll().stream()
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getClubsByType(Club.ClubType type) {
-        return clubRepository.findByType(type).stream().map(ClubResponse::from).toList();
+        return clubRepository.findByType(type).stream()
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getClubsByCategory(Club.ClubCategory category) {
-        return clubRepository.findByCategory(category).stream().map(ClubResponse::from).toList();
+        return clubRepository.findByCategory(category).stream()
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -116,18 +143,37 @@ public class ClubService {
             Club.ClubType type, Club.ClubCategory category, Pageable pageable) {
         return clubRepository
                 .findByTypeAndCategory(type, category, pageable)
-                .map(ClubResponse::from);
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        });
     }
 
     @Transactional(readOnly = true)
     public Page<ClubResponse> searchClubs(String keyword, Pageable pageable) {
-        return clubRepository.searchByKeyword(keyword, pageable).map(ClubResponse::from);
+        return clubRepository
+                .searchByKeyword(keyword, pageable)
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        });
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getClubsByManager(Long userId) {
         User user = userService.findById(userId);
-        return clubRepository.findByManager(user).stream().map(ClubResponse::from).toList();
+        return clubRepository.findByManager(user).stream()
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
+                .toList();
     }
 
     @Transactional
@@ -176,5 +222,12 @@ public class ClubService {
         if (!club.getManagers().contains(user)) {
             throw new IllegalArgumentException("해당 동아리의 관리자가 아닙니다.");
         }
+    }
+
+    private Recruitment.RecruitmentStatus getLatestRecruitmentStatus(Club club) {
+        return recruitmentRepository
+                .findTopByClubOrderByCreatedAtDesc(club)
+                .map(Recruitment::getStatus)
+                .orElse(null);
     }
 }
