@@ -4,6 +4,7 @@ import com.donggle.domain.club.domain.Club;
 import com.donggle.domain.recruitment.domain.Recruitment;
 import com.donggle.domain.recruitment.dto.RecruitmentRequest;
 import com.donggle.domain.recruitment.dto.RecruitmentResponse;
+import com.donggle.global.annotation.AllowAnonymous;
 import com.donggle.global.auth.resolver.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,6 +80,7 @@ public interface RecruitmentApi {
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId,
             @Parameter(hidden = true) @UserId Long userId);
 
+    @AllowAnonymous
     @Operation(summary = "모집 공고 조회", description = "모집 공고 ID로 모집 공고 정보를 조회합니다.")
     @ApiResponses(
             value = {
@@ -97,16 +99,19 @@ public interface RecruitmentApi {
     ResponseEntity<RecruitmentResponse> getRecruitment(
             @Parameter(description = "모집 공고 ID") @PathVariable Long recruitmentId);
 
+    @AllowAnonymous
     @Operation(summary = "전체 모집 공고 목록 조회", description = "모든 모집 공고 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "모집 공고 목록 조회 성공")})
     @GetMapping
     ResponseEntity<List<RecruitmentResponse>> getAllRecruitments();
 
+    @AllowAnonymous
     @Operation(summary = "진행 중인 모집 공고 목록 조회", description = "현재 진행 중인 모집 공고 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "모집 공고 목록 조회 성공")})
     @GetMapping("/active")
     ResponseEntity<List<RecruitmentResponse>> getActiveRecruitments();
 
+    @AllowAnonymous
     @Operation(summary = "동아리별 모집 공고 목록 조회", description = "특정 동아리의 모집 공고 목록을 조회합니다.")
     @ApiResponses(
             value = {
@@ -117,6 +122,7 @@ public interface RecruitmentApi {
     ResponseEntity<List<RecruitmentResponse>> getRecruitmentsByClub(
             @Parameter(description = "동아리 ID") @PathVariable Long clubId);
 
+    @AllowAnonymous
     @Operation(summary = "상태별 모집 공고 목록 조회", description = "모집 상태(준비중, 모집중, 마감)별로 모집 공고 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "모집 공고 목록 조회 성공")})
     @GetMapping("/status/{status}")
@@ -124,6 +130,7 @@ public interface RecruitmentApi {
             @Parameter(description = "모집 상태(PREPARING, RECRUITING, CLOSED)") @PathVariable
                     Recruitment.RecruitmentStatus status);
 
+    @AllowAnonymous
     @Operation(
             summary = "동아리 타입 및 상태별 모집 공고 목록 조회",
             description = "동아리 타입(중앙동아리, 학과동아리)과 모집 상태로 필터링하여 모집 공고 목록을 조회합니다.")
@@ -135,6 +142,7 @@ public interface RecruitmentApi {
             @Parameter(description = "모집 상태(PREPARING, RECRUITING, CLOSED)") @PathVariable
                     Recruitment.RecruitmentStatus status);
 
+    @AllowAnonymous
     @Operation(
             summary = "동아리 카테고리 및 상태별 모집 공고 목록 조회",
             description = "동아리 카테고리(학술, 문화, 체육 등)와 모집 상태로 필터링하여 모집 공고 목록을 조회합니다.")
