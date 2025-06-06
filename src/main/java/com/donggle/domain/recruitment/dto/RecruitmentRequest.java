@@ -20,7 +20,6 @@ public class RecruitmentRequest {
 
     private Integer recruitCount;
 
-    @NotNull(message = "모집 시작일은 필수 입력값입니다.")
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
