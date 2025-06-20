@@ -28,14 +28,19 @@ public class NotificationTool {
     @Tool(
             description =
                     """
-            미읽은 알림 목록을 조회하는 함수입니다.
+            미읽은 알림 목록을 조회하는 함수입니다. 실시간 알림 현황을 제공합니다.
 
-            매개변수:
-            - limit: 결과 개수 제한 (기본값: 5)
+            📋 매개변수 (모두 선택사항):
+            - limit: 결과 개수 제한 (기본값: 5, 최대 20)
 
-            사용 예시:
-            - "새로운 알림 있어?"
-            - "미읽은 알림 확인해줘"
+            🎯 사용 예시:
+            ✅ 새로운 알림 확인: getUnreadNotifications({})
+            ✅ 더 많은 알림: getUnreadNotifications({"limit": 10})
+
+            💡 팁:
+            - 읽지 않은 알림만 최신순으로 보여줍니다
+            - 알림 타입별로 이모지와 함께 표시됩니다
+            - 개인정보이므로 로그인한 사용자만 조회 가능합니다
             """)
     public String getUnreadNotifications(Request request) {
         try {
@@ -46,7 +51,7 @@ public class NotificationTool {
                 return USER_ID_ERROR;
             }
 
-            int limit = request.limit != null ? request.limit : 5;
+            int limit = Math.min(request.limit != null ? request.limit : 5, 20);
             var page = notificationService.getUnreadNotifications(userId, PageRequest.of(0, limit));
             List<NotificationResponse> notifications = page.getContent();
 
@@ -82,12 +87,20 @@ public class NotificationTool {
     @Tool(
             description =
                     """
-            알림을 요약해서 제공하는 함수입니다.
+            알림을 요약해서 제공하는 스마트 알림 대시보드 함수입니다.
 
-            사용 예시:
-            - "알림 요약해줘"
-            - "중요한 알림 알려줘"
-            - "놓친 공지사항 있나?"
+            📋 매개변수: 없음 (모든 미읽은 알림을 자동 분석)
+
+            🎯 제공 정보:
+            ✅ 미읽은 알림 총 개수
+            ✅ 카테고리별 분류 (공지사항, 지원결과, 새 모집, 동아리 등)
+            ✅ 우선순위 높은 중요 알림 하이라이트
+            ✅ 알림 현황 한눈에 보기
+
+            💡 사용 시나리오:
+            - "알림 요약해줘" - 전체 알림 현황 파악
+            - "중요한 알림 알려줘" - 놓친 중요 알림 확인
+            - "놓친 공지사항 있나?" - 공지사항 위주 확인
             """)
     public String getNotificationSummary(Request request) {
         try {
@@ -165,14 +178,20 @@ public class NotificationTool {
     @Tool(
             description =
                     """
-            최근 알림을 조회하는 함수입니다.
+            최근 알림을 전체적으로 조회하는 함수입니다. 읽음/안읽음 상태 구분하여 표시합니다.
 
-            매개변수:
-            - limit: 결과 개수 제한 (기본값: 10)
+            📋 매개변수 (모두 선택사항):
+            - limit: 결과 개수 제한 (기본값: 10, 최대 30)
 
-            사용 예시:
-            - "최근 알림 보여줘"
-            - "전체 알림 확인해줘"
+            🎯 사용 예시:
+            ✅ 최근 알림 전체: getRecentNotifications({})
+            ✅ 더 많은 알림: getRecentNotifications({"limit": 20})
+
+            💡 특징:
+            - 읽음/안읽음 상태를 아이콘으로 구분 (✅/🔴)
+            - 알림 타입별 이모지 표시
+            - 최신순 정렬로 최근 활동 파악 가능
+            - 전체 알림 이력 확인에 유용
             """)
     public String getRecentNotifications(Request request) {
         try {
@@ -183,7 +202,7 @@ public class NotificationTool {
                 return USER_ID_ERROR;
             }
 
-            int limit = request.limit != null ? request.limit : 10;
+            int limit = Math.min(request.limit != null ? request.limit : 10, 30);
             var page = notificationService.getNotifications(userId, PageRequest.of(0, limit));
             List<NotificationResponse> notifications = page.getContent();
 

@@ -24,16 +24,23 @@ public class ApplicationTool {
     @Tool(
             description =
                     """
-            사용자의 지원서 목록을 조회하는 함수입니다.
+            사용자의 지원서 목록을 조회하는 함수입니다. 개인화된 지원 현황을 제공합니다.
 
-            매개변수:
-            - status: 지원 상태 (PENDING=대기중, APPROVED=합격, REJECTED=불합격, CANCELED=취소)
-            - limit: 결과 개수 제한 (기본값: 10)
+            📋 매개변수 (모두 선택사항):
+            - status: 지원 상태 (PENDING/대기중, APPROVED/합격, REJECTED/불합격, CANCELED/취소)
+            - limit: 결과 개수 제한 (기본값: 10, 최대 50)
 
-            사용 예시:
-            - "내가 지원한 동아리 상태 알려줘" → 전체 조회
-            - "합격한 동아리 있어?" → status="APPROVED"
-            - "대기 중인 지원서 확인해줘" → status="PENDING"
+            🎯 사용 예시:
+            ✅ 전체 지원현황: getMyApplications({}) 또는 조건 없이 호출
+            ✅ 합격 확인: getMyApplications({"status": "APPROVED"}) 또는 getMyApplications({"status": "합격"})
+            ✅ 대기 중 지원서: getMyApplications({"status": "PENDING"})
+            ✅ 더 많은 결과: getMyApplications({"limit": 20})
+
+            💡 팁:
+            - 조건이 없으면 모든 지원서를 최신순으로 보여줍니다
+            - 한글/영어 상태명 모두 지원합니다
+            - 상태별 통계와 요약 정보도 함께 제공됩니다
+            - 개인정보이므로 로그인한 사용자만 조회 가능합니다
             """)
     public String getMyApplications(Request request) {
         try {
@@ -44,7 +51,7 @@ public class ApplicationTool {
                 return "사용자 ID를 확인할 수 없습니다.";
             }
 
-            int limit = request.limit != null ? request.limit : 10;
+            int limit = Math.min(request.limit != null ? request.limit : 10, 50);
             List<ApplicationResponse> applications;
 
             if (request.status != null && !request.status.isBlank()) {

@@ -26,6 +26,7 @@ public class AiConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
         return chatClientBuilder
+                .defaultSystem(systemTemplate)
                 .defaultTools(clubSearchTool, recruitmentTool, applicationTool, notificationTool)
                 .build();
     }
