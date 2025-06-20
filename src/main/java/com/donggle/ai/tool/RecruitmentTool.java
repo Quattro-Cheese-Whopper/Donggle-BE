@@ -21,20 +21,19 @@ public class RecruitmentTool {
             String action, // "active", "byStatus", "byClub"
             String status,
             Long clubId,
-            Integer limit) {
-    }
+            Integer limit) {}
 
     @Tool(
             description =
                     """
                             모집 공고를 조회하는 함수입니다.
-                            
+
                             매개변수:
                             - action: 조회 방식 ("active"=진행중, "byStatus"=상태별, "byClub"=동아리별)
                             - status: 모집 상태 (RECRUITING=모집중, COMPLETED=모집마감, ALWAYS_RECRUITING=상시모집)
                             - clubId: 동아리 ID (동아리별 조회시 필요)
                             - limit: 결과 개수 제한 (기본값: 5)
-                            
+
                             사용 예시:
                             - "현재 모집 중인 동아리 알려줘" → action="active"
                             - "마감된 모집 공고 보여줘" → action="byStatus", status="COMPLETED"
@@ -47,10 +46,11 @@ public class RecruitmentTool {
             int limit = request.limit != null ? request.limit : 5;
 
             switch (request.action) {
-                case "active" -> recruitments =
-                        recruitmentService.getActiveRecruitments().stream()
-                                .limit(limit)
-                                .toList();
+                case "active" ->
+                        recruitments =
+                                recruitmentService.getActiveRecruitments().stream()
+                                        .limit(limit)
+                                        .toList();
                 case "byStatus" -> {
                     Recruitment.RecruitmentStatus recruitmentStatus =
                             parseRecruitmentStatus(request.status);
@@ -68,10 +68,11 @@ public class RecruitmentTool {
                                     .limit(limit)
                                     .toList();
                 }
-                default -> recruitments =
-                        recruitmentService.getAllRecruitments().stream()
-                                .limit(limit)
-                                .toList();
+                default ->
+                        recruitments =
+                                recruitmentService.getAllRecruitments().stream()
+                                        .limit(limit)
+                                        .toList();
             }
 
             return formatRecruitmentResults(recruitments, request);

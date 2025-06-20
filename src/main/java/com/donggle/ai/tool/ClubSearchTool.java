@@ -40,6 +40,9 @@ public class ClubSearchTool {
             log.info("동아리 검색 요청: {}", request);
 
             List<ClubResponse> clubs;
+            if (request == null) {
+                return "검색 요청이 유효하지 않습니다.";
+            }
             int limit = request.limit != null ? request.limit : 5;
 
             if (request.keyword != null && !request.keyword.isBlank()) {

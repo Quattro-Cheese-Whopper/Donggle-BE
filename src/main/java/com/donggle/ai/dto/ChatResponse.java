@@ -15,6 +15,9 @@ public class ChatResponse {
     @Schema(description = "AI 응답 메시지")
     private String message;
 
+    @Schema(description = "채팅 세션 ID")
+    private String chatId;
+
     @Schema(description = "사용된 도구 목록")
     private List<String> usedTools;
 
@@ -25,18 +28,21 @@ public class ChatResponse {
     @Schema(description = "응답 처리 시간 (밀리초)")
     private Long processingTimeMs;
 
-    public ChatResponse(String message, List<String> usedTools, Long processingTimeMs) {
+    public ChatResponse(
+            String message, String chatId, List<String> usedTools, Long processingTimeMs) {
         this.message = message;
+        this.chatId = chatId;
         this.usedTools = usedTools;
         this.responseTime = LocalDateTime.now();
         this.processingTimeMs = processingTimeMs;
     }
 
-    public static ChatResponse of(String message, List<String> usedTools, Long processingTimeMs) {
-        return new ChatResponse(message, usedTools, processingTimeMs);
+    public static ChatResponse of(
+            String message, String chatId, List<String> usedTools, Long processingTimeMs) {
+        return new ChatResponse(message, chatId, usedTools, processingTimeMs);
     }
 
-    public static ChatResponse simple(String message) {
-        return new ChatResponse(message, List.of(), 0L);
+    public static ChatResponse simple(String message, String chatId) {
+        return new ChatResponse(message, chatId, List.of(), 0L);
     }
 }

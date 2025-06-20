@@ -1,6 +1,7 @@
 package com.donggle.ai.service;
 
 import com.donggle.ai.dto.ChatResponse;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -16,13 +17,23 @@ public class AiChatbotService {
     private final ChatClient chatClient;
     private final InMemoryChatMemory chatMemory = new InMemoryChatMemory();
 
-    public ChatResponse chat(String message, Long userId) {
+    public ChatResponse chat(String message, String chatId, Boolean isNewChat, Long userId) {
         long startTime = System.currentTimeMillis();
 
         // ThreadLocal에 사용자 ID 설정
         UserContextHolder.setUserId(userId);
 
         try {
+            // 채팅 세션 ID 결정
+            String conversationId = determineConversationId(chatId, isNewChat);
+
+            log.info(
+                    "채팅 요청 - userId: {}, chatId: {}, isNewChat: {}, conversationId: {}",
+                    userId,
+                    chatId,
+                    isNewChat,
+                    conversationId);
+
             String systemPrompt = buildSystemPrompt(userId);
 
             String response =
@@ -30,21 +41,55 @@ public class AiChatbotService {
                             .prompt()
                             .system(systemPrompt)
                             .user(message)
-                            .advisors(
-                                    new MessageChatMemoryAdvisor(chatMemory, userId.toString(), 10))
+                            .advisors(new MessageChatMemoryAdvisor(chatMemory, conversationId, 10))
                             .call()
                             .content();
 
             long processingTime = System.currentTimeMillis() - startTime;
 
-            return ChatResponse.of(response, getUsedTools(), processingTime);
+            return ChatResponse.of(response, conversationId, getUsedTools(), processingTime);
 
         } catch (Exception e) {
             log.error("AI 챗봇 처리 중 오류 발생: {}", e.getMessage(), e);
-            return ChatResponse.simple("죄송합니다. 요청을 처리하는 중 오류가 발생했습니다. 다시 시도해주세요.");
+            String errorChatId = chatId != null ? chatId : generateNewChatId();
+            return ChatResponse.simple("죄송합니다. 요청을 처리하는 중 오류가 발생했습니다. 다시 시도해주세요.", errorChatId);
         } finally {
             // ThreadLocal 정리
             UserContextHolder.clear();
+        }
+    }
+
+    /** 대화 ID 결정 로직 1. 새 채팅이면 새 ID 생성 2. 기존 chatId가 있으면 사용 3. 둘 다 없으면 새 ID 생성 */
+    private String determineConversationId(String chatId, Boolean isNewChat) {
+        if (isNewChat != null && isNewChat) {
+            // 새 채팅 명시적 요청
+            String newChatId = generateNewChatId();
+            log.info("새 채팅 세션 생성: {}", newChatId);
+            return newChatId;
+        }
+
+        if (chatId != null && !chatId.isBlank()) {
+            // 기존 채팅 ID 사용
+            log.info("기존 채팅 세션 사용: {}", chatId);
+            return chatId;
+        }
+
+        // 채팅 ID가 없으면 새로 생성
+        String newChatId = generateNewChatId();
+        log.info("채팅 ID 없음, 새 세션 생성: {}", newChatId);
+        return newChatId;
+    }
+
+    /** 새로운 채팅 세션 ID 생성 */
+    private String generateNewChatId() {
+        return "chat-" + UUID.randomUUID();
+    }
+
+    /** 채팅 세션 메모리 초기화 (새 채팅용) */
+    public void clearChatMemory(String chatId) {
+        if (chatId != null) {
+            chatMemory.clear(chatId);
+            log.info("채팅 메모리 초기화: {}", chatId);
         }
     }
 
