@@ -4,6 +4,7 @@ services:
     image: mysql:8.0
     ports:
       - "3306:3306"
+    restart: unless-stopped
     environment:
       TZ: Asia/Seoul
       LC_ALL: C.UTF-8
@@ -28,8 +29,8 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
-    environment: # Redis 계정 추가
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    restart: unless-stopped
+    command: /bin/sh -c "redis-server --requirepass $REDIS_PASSWORD"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       start_period: 10s
@@ -45,6 +46,7 @@ services:
     image: ${DOCKER_USERNAME}/${DOCKER_REPO}:${IMAGE_TAG}
     ports:
       - "8080:8080"
+    restart: unless-stopped
     env_file:
       - .env
     healthcheck:
