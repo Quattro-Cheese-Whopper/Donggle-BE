@@ -3,6 +3,7 @@ package com.donggle.domain.announce.controller;
 import com.donggle.domain.announce.domain.Announce;
 import com.donggle.domain.announce.dto.AnnounceRequest;
 import com.donggle.domain.announce.dto.AnnounceResponse;
+import com.donggle.global.annotation.AllowAnonymous;
 import com.donggle.global.auth.resolver.UserId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -93,6 +94,7 @@ public interface AnnounceApi {
             @Parameter(description = "공지사항 ID") @PathVariable Long announceId,
             @Parameter(hidden = true) @UserId Long userId);
 
+    @AllowAnonymous
     @Operation(summary = "공지사항 조회", description = "공지사항 ID로 공지사항 정보를 조회합니다.")
     @ApiResponses(
             value = {
@@ -108,6 +110,7 @@ public interface AnnounceApi {
     ResponseEntity<AnnounceResponse> getAnnounce(
             @Parameter(description = "공지사항 ID") @PathVariable Long announceId);
 
+    @AllowAnonymous
     @Operation(summary = "타입별 공지사항 목록 조회", description = "공지사항 타입(일반, 동아리)별로 공지사항 목록을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "공지사항 목록 조회 성공")})
     @GetMapping("/type/{type}")
@@ -116,6 +119,7 @@ public interface AnnounceApi {
                     Announce.AnnounceType type,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable);
 
+    @AllowAnonymous
     @Operation(summary = "동아리별 공지사항 목록 조회", description = "특정 동아리의 공지사항 목록을 조회합니다.")
     @ApiResponses(
             value = {
@@ -127,6 +131,7 @@ public interface AnnounceApi {
             @Parameter(description = "동아리 ID") @PathVariable Long clubId,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable);
 
+    @AllowAnonymous
     @Operation(summary = "타입별 최근 공지사항 조회", description = "공지사항 타입(일반, 동아리)별로 최근 공지사항을 조회합니다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "공지사항 목록 조회 성공")})
     @GetMapping("/recent/type/{type}")
@@ -134,6 +139,7 @@ public interface AnnounceApi {
             @Parameter(description = "공지사항 타입(GENERAL, CLUB)") @PathVariable
                     Announce.AnnounceType type);
 
+    @AllowAnonymous
     @Operation(summary = "동아리별 최근 공지사항 조회", description = "특정 동아리의 최근 공지사항을 조회합니다.")
     @ApiResponses(
             value = {
