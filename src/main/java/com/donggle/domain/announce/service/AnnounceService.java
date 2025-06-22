@@ -126,4 +126,20 @@ public class AnnounceService {
                 .map(AnnounceResponse::from)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public Page<AnnounceResponse> getAnnouncesByClubName(String clubName, Pageable pageable) {
+        Club club = clubService.findByName(clubName);
+
+        return announceRepository.findByClub(club, pageable).map(AnnounceResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AnnounceResponse> getRecentAnnouncesByClubName(String clubName) {
+        Club club = clubService.findByName(clubName);
+
+        return announceRepository.findTop5ByClubOrderByCreatedAtDesc(club).stream()
+                .map(AnnounceResponse::from)
+                .toList();
+    }
 }

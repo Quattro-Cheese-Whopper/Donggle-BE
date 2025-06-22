@@ -22,6 +22,8 @@ public class AnnounceTool {
 
     public record Request(String type, Long clubId, Integer limit) {}
 
+    public record ClubNameRequest(String clubName, Integer limit) {}
+
     @Tool(
             description =
                     """
@@ -117,6 +119,56 @@ public class AnnounceTool {
         } catch (Exception e) {
             log.error("최근 공지사항 조회 중 오류 발생: {}", e.getMessage(), e);
             return "최근 공지사항 조회 중 오류가 발생했습니다: " + e.getMessage();
+        }
+    }
+
+    @Tool(
+            description =
+                    """
+            동아리명으로 해당 동아리의 공지사항을 조회하는 함수입니다. 동아리 이름을 알고 있을 때 편리하게 사용할 수 있습니다.
+
+            📋 매개변수:
+            - clubName: 동아리명 (필수)
+            - limit: 결과 개수 제한 (선택사항, 기본값: 10, 최대 20)
+
+            🎯 사용 예시:
+            ✅ 특정 동아리 공지: getAnnounceByClubName({"clubName": "컴퓨터학과"})
+            ✅ 제한된 결과: getAnnounceByClubName({"clubName": "밴드동아리", "limit": 5})
+            ✅ 더 많은 결과: getAnnounceByClubName({"clubName": "축구동아리", "limit": 15})
+
+            💡 특징:
+            - 동아리명으로 직접 검색하여 빠른 조회
+            - 해당 동아리의 모든 공지사항을 최신순으로 정렬
+            - 고정된 중요 공지사항은 📌 아이콘으로 표시
+            - 동아리명이 정확하지 않으면 오류 메시지 반환
+
+            ⚠️ 주의사항:
+            - 동아리명은 정확히 입력해야 합니다 (대소문자 구분)
+            - 존재하지 않는 동아리명을 입력하면 오류가 발생합니다
+            """)
+    public String getAnnounceByClubName(ClubNameRequest request) {
+        try {
+            log.info("동아리명으로 공지사항 조회 요청: {}", request);
+
+            // null 안전성 처리
+            if (request == null || !hasValue(request.clubName)) {
+                return "❌ 동아리명을 입력해주세요.";
+            }
+
+            int limit = Math.min(request.limit != null ? request.limit : 10, 20);
+            String clubName = normalizeString(request.clubName);
+
+            List<AnnounceResponse> announcements = 
+                    announceService.getAnnouncesByClubName(clubName, PageRequest.of(0, limit)).getContent();
+
+            return formatClubNameAnnouncementResults(announcements, request);
+
+        } catch (Exception e) {
+            log.error("동아리명으로 공지사항 조회 중 오류 발생: {}", e.getMessage(), e);
+            if (e.getMessage().contains("동아리를 찾을 수 없습니다")) {
+                return String.format("❌ '%s' 동아리를 찾을 수 없습니다. 동아리명을 정확히 입력해주세요.", request.clubName);
+            }
+            return "공지사항 조회 중 오류가 발생했습니다: " + e.getMessage();
         }
     }
 
@@ -391,5 +443,77 @@ public class AnnounceTool {
         } catch (Exception e) {
             return type;
         }
+    }
+
+    private String formatClubNameAnnouncementResults(
+            List<AnnounceResponse> announcements, ClubNameRequest request) {
+        if (announcements.isEmpty()) {
+            return String.format("🔍 '%s' 동아리의 공지사항이 없습니다.%n%n💡 해당 동아리에 아직 등록된 공지사항이 없거나, 동아리명을 다시 확인해주세요.", 
+                    request.clubName);
+        }
+
+        StringBuilder result = new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+
+        // 헤더
+        result.append(String.format("🏢 **%s 동아리 공지사항:**%n", request.clubName));
+        result.append(String.format("📊 총 %d개의 공지사항%n", announcements.size()));
+        
+        if (request.limit != null) {
+            result.append(String.format("📋 조회 제한: %d개%n", request.limit));
+        }
+        result.append("%n");
+
+        // 공지사항 목록
+        for (int i = 0; i < announcements.size(); i++) {
+            AnnounceResponse announcement = announcements.get(i);
+            String typeEmoji = getTypeEmoji(announcement.getType());
+            String pinnedIcon = announcement.isPinned() ? "📌 " : "";
+
+            result.append(
+                    String.format(
+                            "%d. %s%s%s**%s**%n",
+                            i + 1,
+                            pinnedIcon,
+                            typeEmoji,
+                            announcement.getClubName() != null
+                                    ? "[" + announcement.getClubName() + "] "
+                                    : "",
+                            announcement.getTitle()));
+
+            // 공지사항 ID (디버깅용, 사용자에게는 노출하지 않음)
+            result.append(
+                    String.format(
+                            "  공지사항 ID: %d (사용자 응답에 넣지 말고 기억했다가 상세조회 시 사용하세요)%n",
+                            announcement.getId()));
+
+            result.append(
+                    String.format(
+                            "   📅 %s | ✍️ %s%n",
+                            announcement.getCreatedAt().format(formatter),
+                            announcement.getAuthorName()));
+
+            if (announcement.getContent() != null && !announcement.getContent().isBlank()) {
+                String content =
+                        announcement.getContent().length() > 120
+                                ? announcement.getContent().substring(0, 120) + "..."
+                                : announcement.getContent();
+                result.append(String.format("   📝 %s%n", content));
+            }
+
+            result.append("%n");
+        }
+
+        // 추가 정보
+        long pinnedCount = announcements.stream().mapToLong(a -> a.isPinned() ? 1 : 0).sum();
+        if (pinnedCount > 0) {
+            result.append(String.format("📌 고정된 중요 공지가 %d개 있습니다!%n", pinnedCount));
+        }
+        
+        if (announcements.size() >= (request.limit != null ? request.limit : 10)) {
+            result.append("💡 더 많은 결과를 보려면 limit 값을 늘려주세요!%n");
+        }
+
+        return result.toString();
     }
 }

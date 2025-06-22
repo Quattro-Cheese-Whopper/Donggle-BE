@@ -3,6 +3,7 @@ package com.donggle.domain.club.repository;
 import com.donggle.domain.club.domain.Club;
 import com.donggle.domain.user.domain.User;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,6 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
     List<Club> findByManager(@Param("manager") User manager);
 
     boolean existsByName(String name);
+
+    Optional<Club> findByName(String name);
 }

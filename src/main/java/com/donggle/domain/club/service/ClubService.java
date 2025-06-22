@@ -96,6 +96,13 @@ public class ClubService {
     }
 
     @Transactional(readOnly = true)
+    public Club findByName(String name) {
+        return clubRepository
+                .findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("동아리를 찾을 수 없습니다. 이름: " + name));
+    }
+
+    @Transactional(readOnly = true)
     public ClubResponse getClub(Long clubId) {
         Club club = findById(clubId);
         Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(club);
