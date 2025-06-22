@@ -173,7 +173,8 @@ public class ClubSearchTool {
     }
 
     /** 모집중인 동아리 조회 로직 */
-    private List<ClubResponse> getRecruitingClubsWithConditions(String type, String category, int limit) {
+    private List<ClubResponse> getRecruitingClubsWithConditions(
+            String type, String category, int limit) {
         // 1. 타입과 카테고리 둘 다 있으면 복합 조건 검색
         if (hasValue(type) && hasValue(category)) {
             Club.ClubType clubType = parseClubType(type);
@@ -196,7 +197,9 @@ public class ClubSearchTool {
         if (hasValue(category)) {
             Club.ClubCategory clubCategory = parseClubCategory(category);
             log.info("카테고리별 모집중인 동아리 검색: {}", clubCategory);
-            return clubService.getRecruitingClubsByCategory(clubCategory).stream().limit(limit).toList();
+            return clubService.getRecruitingClubsByCategory(clubCategory).stream()
+                    .limit(limit)
+                    .toList();
         }
 
         // 4. 조건이 없으면 모집중인 모든 동아리 조회
@@ -348,7 +351,8 @@ public class ClubSearchTool {
         return result.toString();
     }
 
-    private String formatRecruitingClubResults(List<ClubResponse> clubs, RecruitingRequest request) {
+    private String formatRecruitingClubResults(
+            List<ClubResponse> clubs, RecruitingRequest request) {
         if (clubs.isEmpty()) {
             StringBuilder emptyMessage = new StringBuilder();
             emptyMessage.append("🔍 현재 모집중인 동아리를 찾을 수 없습니다.%n%n");
@@ -371,18 +375,31 @@ public class ClubSearchTool {
         result.append("%n");
 
         // 모집상태별 통계
-        long recruitingCount = clubs.stream()
-                .filter(club -> club.getLatestRecruitmentStatus() != null)
-                .filter(club -> club.getLatestRecruitmentStatus().name().equals("RECRUITING"))
-                .count();
-        long alwaysRecruitingCount = clubs.stream()
-                .filter(club -> club.getLatestRecruitmentStatus() != null)
-                .filter(club -> club.getLatestRecruitmentStatus().name().equals("ALWAYS_RECRUITING"))
-                .count();
+        long recruitingCount =
+                clubs.stream()
+                        .filter(club -> club.getLatestRecruitmentStatus() != null)
+                        .filter(
+                                club ->
+                                        club.getLatestRecruitmentStatus()
+                                                .name()
+                                                .equals("RECRUITING"))
+                        .count();
+        long alwaysRecruitingCount =
+                clubs.stream()
+                        .filter(club -> club.getLatestRecruitmentStatus() != null)
+                        .filter(
+                                club ->
+                                        club.getLatestRecruitmentStatus()
+                                                .name()
+                                                .equals("ALWAYS_RECRUITING"))
+                        .count();
 
         if (clubs.size() > 1) {
             result.append("📈 **모집 현황:**%n");
-            result.append(String.format("   🚀 모집중: %d개 | ⏰ 상시모집: %d개%n%n", recruitingCount, alwaysRecruitingCount));
+            result.append(
+                    String.format(
+                            "   🚀 모집중: %d개 | ⏰ 상시모집: %d개%n%n",
+                            recruitingCount, alwaysRecruitingCount));
         }
 
         // 동아리 목록

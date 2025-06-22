@@ -9,6 +9,7 @@ import com.donggle.domain.recruitment.repository.RecruitmentRepository;
 import com.donggle.domain.user.domain.User;
 import com.donggle.domain.user.service.UserService;
 import com.donggle.global.error.exception.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -240,73 +241,95 @@ public class ClubService {
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getRecruitingClubs() {
-        List<Recruitment> recruitingRecruitments = recruitmentRepository.findByStatus(Recruitment.RecruitmentStatus.RECRUITING);
-        List<Recruitment> alwaysRecruitingRecruitments = recruitmentRepository.findByStatus(Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
+        List<Recruitment> recruitingRecruitments =
+                recruitmentRepository.findByStatus(Recruitment.RecruitmentStatus.RECRUITING);
+        List<Recruitment> alwaysRecruitingRecruitments =
+                recruitmentRepository.findByStatus(Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
 
         // 두 리스트를 합치고 중복 제거 후 ClubResponse로 변환
-        List<Club> recruitingClubs = recruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
-        
-        List<Club> alwaysRecruitingClubs = alwaysRecruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
+        List<Club> recruitingClubs =
+                recruitingRecruitments.stream().map(Recruitment::getClub).toList();
 
-        return recruitingClubs.stream()
-                .concat(alwaysRecruitingClubs.stream())
+        List<Club> alwaysRecruitingClubs =
+                alwaysRecruitingRecruitments.stream().map(Recruitment::getClub).toList();
+
+        // 리스트 합치기
+        List<Club> allClubs = new ArrayList<>();
+        allClubs.addAll(recruitingClubs);
+        allClubs.addAll(alwaysRecruitingClubs);
+
+        return allClubs.stream()
                 .distinct()
-                .map(club -> {
-                    Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(club);
-                    return ClubResponse.from(club, latestStatus);
-                })
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getRecruitingClubsByType(Club.ClubType type) {
-        List<Recruitment> recruitingRecruitments = recruitmentRepository.findByClubTypeAndStatus(type, Recruitment.RecruitmentStatus.RECRUITING);
-        List<Recruitment> alwaysRecruitingRecruitments = recruitmentRepository.findByClubTypeAndStatus(type, Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
+        List<Recruitment> recruitingRecruitments =
+                recruitmentRepository.findByClubTypeAndStatus(
+                        type, Recruitment.RecruitmentStatus.RECRUITING);
+        List<Recruitment> alwaysRecruitingRecruitments =
+                recruitmentRepository.findByClubTypeAndStatus(
+                        type, Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
 
         // 두 리스트를 합치고 중복 제거 후 ClubResponse로 변환
-        List<Club> recruitingClubs = recruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
-        
-        List<Club> alwaysRecruitingClubs = alwaysRecruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
+        List<Club> recruitingClubs =
+                recruitingRecruitments.stream().map(Recruitment::getClub).toList();
 
-        return recruitingClubs.stream()
-                .concat(alwaysRecruitingClubs.stream())
+        List<Club> alwaysRecruitingClubs =
+                alwaysRecruitingRecruitments.stream().map(Recruitment::getClub).toList();
+
+        // 리스트 합치기
+        List<Club> allClubs = new ArrayList<>();
+        allClubs.addAll(recruitingClubs);
+        allClubs.addAll(alwaysRecruitingClubs);
+
+        return allClubs.stream()
                 .distinct()
-                .map(club -> {
-                    Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(club);
-                    return ClubResponse.from(club, latestStatus);
-                })
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ClubResponse> getRecruitingClubsByCategory(Club.ClubCategory category) {
-        List<Recruitment> recruitingRecruitments = recruitmentRepository.findByClubCategoryAndStatus(category, Recruitment.RecruitmentStatus.RECRUITING);
-        List<Recruitment> alwaysRecruitingRecruitments = recruitmentRepository.findByClubCategoryAndStatus(category, Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
+        List<Recruitment> recruitingRecruitments =
+                recruitmentRepository.findByClubCategoryAndStatus(
+                        category, Recruitment.RecruitmentStatus.RECRUITING);
+        List<Recruitment> alwaysRecruitingRecruitments =
+                recruitmentRepository.findByClubCategoryAndStatus(
+                        category, Recruitment.RecruitmentStatus.ALWAYS_RECRUITING);
 
         // 두 리스트를 합치고 중복 제거 후 ClubResponse로 변환
-        List<Club> recruitingClubs = recruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
-        
-        List<Club> alwaysRecruitingClubs = alwaysRecruitingRecruitments.stream()
-                .map(Recruitment::getClub)
-                .toList();
+        List<Club> recruitingClubs =
+                recruitingRecruitments.stream().map(Recruitment::getClub).toList();
 
-        return recruitingClubs.stream()
-                .concat(alwaysRecruitingClubs.stream())
+        List<Club> alwaysRecruitingClubs =
+                alwaysRecruitingRecruitments.stream().map(Recruitment::getClub).toList();
+
+        // 리스트 합치기
+        List<Club> allClubs = new ArrayList<>();
+        allClubs.addAll(recruitingClubs);
+        allClubs.addAll(alwaysRecruitingClubs);
+
+        return allClubs.stream()
                 .distinct()
-                .map(club -> {
-                    Recruitment.RecruitmentStatus latestStatus = getLatestRecruitmentStatus(club);
-                    return ClubResponse.from(club, latestStatus);
-                })
+                .map(
+                        club -> {
+                            Recruitment.RecruitmentStatus latestStatus =
+                                    getLatestRecruitmentStatus(club);
+                            return ClubResponse.from(club, latestStatus);
+                        })
                 .toList();
     }
 }
