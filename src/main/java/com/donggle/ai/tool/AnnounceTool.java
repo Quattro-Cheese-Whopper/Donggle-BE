@@ -47,7 +47,7 @@ public class AnnounceTool {
             - 고정된 중요 공지사항은 📌 아이콘으로 표시됩니다
             - "총동연"이란 "총동아리 연합회"의 약어로, 일반 공지사항 (GENERAL)에 해당합니다.
 
-            공지사항 ID는 사용자 응답에 포함하면 안됩니다.
+            공지사항 ID는 사용자 응답에 포함하면 안됩니다. 상세조회 시 사용하세요
             """)
     public String getAnnouncements(Request request) {
         try {
@@ -265,6 +265,12 @@ public class AnnounceTool {
                                     : "",
                             announcement.getTitle()));
 
+            // 공지사항 ID
+            result.append(
+                    String.format(
+                            "  공지사항 ID: %d (사용자 응답에 넣지 말고 기억했다가 상세조회 시 사용하세요)%n",
+                            announcement.getId()));
+
             result.append(
                     String.format(
                             "   📅 %s | ✍️ %s%n",
@@ -333,6 +339,12 @@ public class AnnounceTool {
                                     ? "[" + announcement.getClubName() + "] "
                                     : "",
                             announcement.getTitle()));
+
+            // 공지사항 ID
+            result.append(
+                    String.format(
+                            "  공지사항 ID: %d (사용자 응답에 넣지 말고 기억했다가 상세조회 시 사용하세요)%n",
+                            announcement.getId()));
 
             result.append(
                     String.format(
