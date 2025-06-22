@@ -45,6 +45,8 @@ public class AnnounceTool {
             - 한글/영어 타입명 모두 지원 (예: "일반" = "GENERAL")
             - clubId와 다른 조건을 조합하여 더 정확한 검색이 가능합니다
             - 고정된 중요 공지사항은 📌 아이콘으로 표시됩니다
+
+            공지사항 ID는 사용자 응답에 포함하면 안됩니다.
             """)
     public String getAnnouncements(Request request) {
         try {

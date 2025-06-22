@@ -1,8 +1,10 @@
 package com.donggle.ai.config;
 
+import com.donggle.ai.tool.AnnounceTool;
 import com.donggle.ai.tool.ApplicationTool;
 import com.donggle.ai.tool.ClubSearchTool;
 import com.donggle.ai.tool.NotificationTool;
+import com.donggle.ai.tool.RecommendationTool;
 import com.donggle.ai.tool.RecruitmentTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -15,10 +17,12 @@ import org.springframework.core.io.Resource;
 @RequiredArgsConstructor
 public class AiConfig {
 
+    private final AnnounceTool announceTool;
     private final ClubSearchTool clubSearchTool;
     private final RecruitmentTool recruitmentTool;
     private final ApplicationTool applicationTool;
     private final NotificationTool notificationTool;
+    private final RecommendationTool recommendationTool;
 
     @Value("classpath:/prompts/system-template.st")
     private Resource systemTemplate;
@@ -27,7 +31,13 @@ public class AiConfig {
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
         return chatClientBuilder
                 .defaultSystem(systemTemplate)
-                .defaultTools(clubSearchTool, recruitmentTool, applicationTool, notificationTool)
+                .defaultTools(
+                        announceTool,
+                        clubSearchTool,
+                        recruitmentTool,
+                        applicationTool,
+                        notificationTool,
+                        recommendationTool)
                 .build();
     }
 }

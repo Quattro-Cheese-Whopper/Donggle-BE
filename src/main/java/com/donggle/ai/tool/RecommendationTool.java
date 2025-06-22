@@ -102,7 +102,8 @@ public class RecommendationTool {
             boolean excludeApplied = request.excludeApplied != null ? request.excludeApplied : true;
 
             // 사용자 지원 이력 분석
-            Map<Club.ClubCategory, Long> userCategoryPreferences = new EnumMap<>(Club.ClubCategory.class);
+            Map<Club.ClubCategory, Long> userCategoryPreferences =
+                    new EnumMap<>(Club.ClubCategory.class);
             Set<Long> appliedClubIds = new HashSet<>();
 
             if (userId != null) {
@@ -282,7 +283,6 @@ public class RecommendationTool {
                 } else if (keyword.equals("운동") || keyword.equals("스포츠")) {
                     if (categoryName.contains("체육")) matchScore += 0.5;
                 } else if (keyword.equals("봉사") && categoryName.contains("봉사")) matchScore += 0.5;
-
             }
         }
 
@@ -438,9 +438,11 @@ public class RecommendationTool {
         }
 
         // 선호도 키워드 매칭
-        if (request.preferences != null && !request.preferences.isBlank() && calculatePreferenceMatchScore(club, request.preferences) > 0) {
-                reasons.add("선호도와 일치하는 활동 분야");
-            }
+        if (request.preferences != null
+                && !request.preferences.isBlank()
+                && calculatePreferenceMatchScore(club, request.preferences) > 0) {
+            reasons.add("선호도와 일치하는 활동 분야");
+        }
 
         // 인기도
         if (club.getMemberCount() != null && club.getMemberCount() > 50) {
