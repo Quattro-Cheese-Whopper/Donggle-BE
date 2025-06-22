@@ -78,7 +78,7 @@ public class RecommendationTool {
             - 사용자 선호도와 지원 패턴 조합
             - 아직 탐색하지 않은 새로운 분야 제안
             - 사용자 맞춤 추천 이유 제공
-            
+
             동아리 ID는 사용자에게 응답하지 말고, 기억해두었다가 이 동아리의 모집공고나 공지사항 등 tool을 이용한 정보를 찾을 때 사용하세요.
             """)
     public String getRecommendedClubs(Request request) {

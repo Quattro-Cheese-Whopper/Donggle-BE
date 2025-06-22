@@ -43,7 +43,9 @@ public class ClubSearchTool {
             - 한글/영어 모두 지원 (예: "중앙" = "CENTRAL")
             - 키워드는 동아리명과 설명에서 부분 일치로 검색됩니다
             - 조건 조합으로 더 정확한 검색이 가능합니다
-            
+            - "학술 동아리" 라면 "학술분과"로 카테고리 설정하듯이 "분과"가 생략된 경우 카테고리에서 "분과"를 추가해 검색하세요
+            - "중앙, 학과"만 동아리 타입이고, "학술", "문예" 등 나머지 단어가 들어간 경우 모두 분과로 취급해 검색하세요
+
             동아리 ID는 사용자에게 응답하지 말고, 기억해두었다가 이 동아리의 모집공고나 공지사항 등 tool을 이용한 정보를 찾을 때 사용하세요.
             """)
     public String searchClubs(Request request) {
@@ -220,8 +222,7 @@ public class ClubSearchTool {
                             club.getCategory().name()));
 
             // 동아리 ID (사용자에게는 응답하지 않음)
-            result.append(
-                    String.format("   (동아리 ID: %d)%n", club.getId()));
+            result.append(String.format("   (동아리 ID: %d)%n", club.getId()));
 
             if (club.getDescription() != null && !club.getDescription().isBlank()) {
                 String description =
