@@ -125,6 +125,7 @@ public class AnnounceTool {
     @Tool(
             description =
                     """
+            총동연 공지사항은 "총동아리 연합회"의 약어로, 일반 공지사항 (GENERAL)에 해당합니다. getAnnouncements Tool을 사용하세요.
             동아리명으로 해당 동아리의 공지사항을 조회하는 함수입니다. 동아리 이름을 알고 있을 때 편리하게 사용할 수 있습니다.
 
             📋 매개변수:
@@ -158,8 +159,10 @@ public class AnnounceTool {
             int limit = Math.min(request.limit != null ? request.limit : 10, 20);
             String clubName = normalizeString(request.clubName);
 
-            List<AnnounceResponse> announcements = 
-                    announceService.getAnnouncesByClubName(clubName, PageRequest.of(0, limit)).getContent();
+            List<AnnounceResponse> announcements =
+                    announceService
+                            .getAnnouncesByClubName(clubName, PageRequest.of(0, limit))
+                            .getContent();
 
             return formatClubNameAnnouncementResults(announcements, request);
 
@@ -448,7 +451,8 @@ public class AnnounceTool {
     private String formatClubNameAnnouncementResults(
             List<AnnounceResponse> announcements, ClubNameRequest request) {
         if (announcements.isEmpty()) {
-            return String.format("🔍 '%s' 동아리의 공지사항이 없습니다.%n%n💡 해당 동아리에 아직 등록된 공지사항이 없거나, 동아리명을 다시 확인해주세요.", 
+            return String.format(
+                    "🔍 '%s' 동아리의 공지사항이 없습니다.%n%n💡 해당 동아리에 아직 등록된 공지사항이 없거나, 동아리명을 다시 확인해주세요.",
                     request.clubName);
         }
 
@@ -458,7 +462,7 @@ public class AnnounceTool {
         // 헤더
         result.append(String.format("🏢 **%s 동아리 공지사항:**%n", request.clubName));
         result.append(String.format("📊 총 %d개의 공지사항%n", announcements.size()));
-        
+
         if (request.limit != null) {
             result.append(String.format("📋 조회 제한: %d개%n", request.limit));
         }
@@ -509,7 +513,7 @@ public class AnnounceTool {
         if (pinnedCount > 0) {
             result.append(String.format("📌 고정된 중요 공지가 %d개 있습니다!%n", pinnedCount));
         }
-        
+
         if (announcements.size() >= (request.limit != null ? request.limit : 10)) {
             result.append("💡 더 많은 결과를 보려면 limit 값을 늘려주세요!%n");
         }
