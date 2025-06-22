@@ -225,7 +225,7 @@ public class ClubSearchTool {
                             club.getCategory().name()));
 
             // 동아리 ID (사용자에게는 응답하지 않음)
-            result.append(String.format("   (동아리 ID: %d)%n", club.getId()));
+            result.append(String.format("   (추후 작업에서 활용할 수 있는 동아리 ID: %d)%n", club.getId()));
 
             if (club.getDescription() != null && !club.getDescription().isBlank()) {
                 String description =
